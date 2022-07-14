@@ -1,6 +1,7 @@
 from exception import RequestError
 import os
 from typing import Iterable, List, Union
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -37,6 +38,22 @@ def limit(data: Iterable, value: str) -> Iterable:
 			break
 
 
+def regex(data: Iterable, value: str) -> Iterable:
+	# value = 'images\/\w+\.png'
+	value_t = 'images/\\w+\\.png'
+	reg = re.compile(value)
+	print(value)
+	print(value_t)
+	while True:
+		try:
+			gen = iter(data)
+			line = next(gen)
+			for i in re.findall(reg, line):
+				yield line
+		except StopIteration:
+			break
+
+
 def read(filename: str) -> Iterable:
 	with open(f'{DATA_DIR}/{filename}', 'r') as file:
 		while True:
@@ -57,5 +74,7 @@ def get_query(data: Iterable, cmd: str, value: str) -> Union[Iterable, set, List
 		return sort(data, value)
 	elif cmd == 'limit':
 		return limit(data, value)
+	elif cmd == 'regex':
+		return regex(data, value)
 	else:
 		raise RequestError('Check command')

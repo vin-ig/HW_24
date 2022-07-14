@@ -8,7 +8,6 @@ app = Flask(__name__)
 @app.route('/perform_query/')
 def query():
 	data = request.args
-
 	try:
 		from_file = read(data.get('file_name'))
 		query = get_query(from_file, data.get('cmd1'), data.get('value1'))
