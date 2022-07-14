@@ -39,16 +39,13 @@ def limit(data: Iterable, value: str) -> Iterable:
 
 
 def regex(data: Iterable, value: str) -> Iterable:
-	# value = 'images\/\w+\.png'
-	value_t = 'images/\\w+\\.png'
+	value = value.replace(' ', '+')  # Из строки запроса пропадает '+'
 	reg = re.compile(value)
-	print(value)
-	print(value_t)
+	gen = iter(data)
 	while True:
 		try:
-			gen = iter(data)
 			line = next(gen)
-			for i in re.findall(reg, line):
+			for _ in re.findall(reg, line):
 				yield line
 		except StopIteration:
 			break
