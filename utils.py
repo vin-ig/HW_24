@@ -1,11 +1,12 @@
 from exception import RequestError
 import os
+from typing import Iterable
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
 
-def filter(data, value):
+def filter(data: Iterable, value: str) -> Iterable:
 	return (line.strip() for line in data if value in line)
 	# Выглядит красивее, но уходит в рекурсию
 	# return filter(lambda row: value in row, data)
